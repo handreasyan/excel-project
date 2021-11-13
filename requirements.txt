@@ -1,12 +1,12 @@
 
 1. Webpack ( imports/exports)
-    1.1 _ Babel
-    1.2 _ Scss
-    1.3 _ Eslint
-    1.4 _ 2 Modes
-            - Dev
+    1.1 _ Babel +
+    1.2 _ Scss +
+    1.3 _ Eslint -
+    1.4 _ 2 Modes +
+            - Dev +
                 DevServer, SourceMaps, Eslint, Not Minified JS & CSS
-            - Prod
+            - Prod +
                 Minified Code
 2. Git
 
