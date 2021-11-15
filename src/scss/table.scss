@@ -65,12 +65,13 @@
   }
   .col-resize, .row-resize {
     position: absolute;
+    z-index: 100;
     bottom: 0;
     right: 0;
     background: $primary-color;
     opacity: 0;
     &:hover {
-      opacity: 1;
+      opacity: 1 !important;
     }
   }
   .col-resize {
