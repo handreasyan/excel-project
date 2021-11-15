@@ -41,9 +41,33 @@ class DOM {
   findAll(selector) {
     return this.$el.querySelectorAll(selector)
   }
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
   css(styles = {}) {
     Object.keys(styles).forEach((prop)=> this.$el.style[prop] = styles[prop])
   }
+  dataId(parse) {
+    if (parse) {
+      const [row, col] = this.dataId().split(':')
+      return {
+        row: Number(row),
+        col: Number(col)
+      }
+    }
+    return this.data.id
+  }
+  addClass(className) {
+    if (this.$el) {
+      this.$el.classList.add(className)
+    }
+  }
+  removeClass(className) {
+    if (this.$el) {
+      this.$el.classList.remove(className)
+    }
+  }
+
 }
 
 
