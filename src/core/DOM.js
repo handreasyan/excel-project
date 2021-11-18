@@ -62,6 +62,10 @@ class DOM {
       this.$el.classList.add(className)
     }
   }
+  focus() {
+    this.$el.focus()
+    return this
+  }
   removeClass(className) {
     if (this.$el) {
       this.$el.classList.remove(className)

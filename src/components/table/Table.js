@@ -1,21 +1,23 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {createTable} from '@/components/table/table.template';
 import {resizeHandler} from './table.resize';
-import {isCell, shouldResize} from './table.functions';
+import {isCell, matrix, nexSelector, shouldResize} from './table.functions';
 import {TableSelection} from './TableSelection';
 import {$} from '@core/DOM';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
 
+
   constructor($root) {
     super($root, {
-      listeners: ['mousedown'],
+      listeners: ['mousedown','keydown'],
     });
+    this.count = 20
   }
 
   toHTML() {
-    return createTable(20)
+    return createTable(this.count)
   }
 
   prepare() {
@@ -35,25 +37,27 @@ export class Table extends ExcelComponent {
     } else if (isCell(event)) {
       const $target = $(event.target)
       if (event.shiftKey) {
-        /*
-
-          // lesson 05_08
-
-        const target = $target.dataId(true)
-        const current = this.selection.current.dataId(true)
-
-        const cols = range(current.col, target.col)
-        const rows = range(current.row, target.row)
-
-        const ids = cols.reduce((acc, col)=>{
-          rows.forEach(row => acc.push(`${row}:${col}`))
-          return acc
-        }, [])
-
-        console.log(ids)*/
+        const $cells = matrix($target,this.selection.current).map(id=>this.$root.find(`[data-id="${id}"]`))
+        this.selection.selectGroup($cells)
       } else {
         this.selection.select($target)
       }
     }
   }
+  onKeydown(event) {
+    const keys = ['Enter','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight']
+
+    const key = event.key
+    if (keys.includes(key) && !event.shiftKey) {
+      event.preventDefault()
+      const id = this.selection.current.dataId(true)
+      const $next = this.$root.find(nexSelector(key,id,this.count-1))
+      this.selection.select($next)
+    } else {
+      console.log('Shift Pressed')
+    }
+
+  }
 }
+
+
