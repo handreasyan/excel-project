@@ -8,10 +8,11 @@ import {$} from '@core/DOM';
 export class Table extends ExcelComponent {
   static className = 'excel__table'
 
-
-  constructor($root) {
+  constructor($root,options) {
     super($root, {
-      listeners: ['mousedown','keydown'],
+      name: 'Table',
+      listeners: ['mousedown','keydown','input'],
+      ...options
     });
     this.count = 20
   }
@@ -27,8 +28,18 @@ export class Table extends ExcelComponent {
   init() {
     super.init()
 
-    const $el = this.$root.find('[data-id="0:0"]') // first field in table
-    this.selection.select($el)
+    this.selectCell(this.$root.find('[data-id="0:0"]'))
+
+    this.$onSubscribe('formula:input', (text) => this.selection.current.text(text))
+    this.$onSubscribe('formula:enter', () => {
+      this.selection.current.focus()
+    })
+
+  }
+
+  selectCell($cell) {
+    this.selection.select($cell)
+    this.$emit('table:select', $cell)
   }
 
   onMousedown(event) {
@@ -43,7 +54,10 @@ export class Table extends ExcelComponent {
         this.selection.select($target)
       }
     }
+    this.$emit('table:input', $(event.target))
+
   }
+
   onKeydown(event) {
     const keys = ['Enter','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight']
 
@@ -52,12 +66,16 @@ export class Table extends ExcelComponent {
       event.preventDefault()
       const id = this.selection.current.dataId(true)
       const $next = this.$root.find(nexSelector(key,id,this.count-1))
-      this.selection.select($next)
+      this.selectCell($next)
+
     } else {
       console.log('Shift Pressed')
     }
-
   }
+  onInput(event){
+    this.$emit('table:input', $(event.target))
+  }
+
 }
 
 

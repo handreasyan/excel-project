@@ -9,7 +9,7 @@ export class Emitter {
       return false
     }
 
-    this.listeners[event].forEach(listener=>listener(args))
+    this.listeners[event].forEach(listener=>listener(...args))
   }
 
   // subscribe on notifications , add new listener
@@ -23,7 +23,6 @@ export class Emitter {
   }
 }
 
-// nex lesson __ 05_13
 
 // Example
 

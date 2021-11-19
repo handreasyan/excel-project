@@ -11,11 +11,21 @@ class DOM {
     }
     return this.$el.outerHTML.trim()
   }
+  text(text) {
+    if (typeof text === 'string') {
+      this.$el.textContent = text
+      return this
+    }
+    if(this.$el.tagName.toLocaleLowerCase() === 'input') {
+      return this.$el.value.trim()
+    }
+    return this.$el.textContent.trim()
+  }
+
   clear() {
     this.html('')
     return this
   }
-
   on(eventType, callback) {
     this.$el.addEventListener(eventType, callback)
   }
@@ -61,6 +71,7 @@ class DOM {
     if (this.$el) {
       this.$el.classList.add(className)
     }
+    return this
   }
   focus() {
     this.$el.focus()
@@ -70,6 +81,7 @@ class DOM {
     if (this.$el) {
       this.$el.classList.remove(className)
     }
+    return this
   }
 
 }
