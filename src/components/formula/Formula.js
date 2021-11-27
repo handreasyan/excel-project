@@ -1,6 +1,5 @@
 import {ExcelComponent} from '@core/ExcelComponent';
-import {TableSelection} from "../table/TableSelection";
-import {$} from "../../core/DOM";
+import {$} from '@core/DOM';
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula'
@@ -28,6 +27,10 @@ export class Formula extends ExcelComponent {
     this.$onSubscribe('table:input', $cell => {
       this.$formula.text($cell.text())
     })
+
+  /*  this.$subscribe(state=>{
+      console.log('FORMULA STATE', state)
+    })*/
   }
   
   onInput(event) {
