@@ -5,6 +5,7 @@ import {isCell, matrix, nexSelector, shouldResize} from './table.functions';
 import {TableSelection} from './TableSelection';
 import {$} from '@core/DOM';
 import * as actions from "@/redux/actions";
+import {defaultStyles} from '@/constants';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -31,19 +32,25 @@ export class Table extends ExcelComponent {
 
     this.selectCell(this.$root.find('[data-id="0:0"]'))
 
-    this.$onSubscribe('formula:input', (text) => this.selection.current.text(text))
+    this.$onSubscribe('formula:input', (text) => {
+      this.updateTextInStore(text)
+      this.selection.current.text(text)
+    })
     this.$onSubscribe('formula:enter', () => {
       this.selection.current.focus()
     })
-
-    this.$subscribe(state=>{
-      console.log('TABLE STATE',state)
+    this.$onSubscribe('toolbar:applyStyle', (style) => {
+      this.selection.applyStyle(style)
     })
+
   }
 
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+    const styles = $cell.getStyle(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
+    console.log('CURRENT CELL STYLES', styles)
   }
 
   async resizeTable(event) {
@@ -84,8 +91,16 @@ export class Table extends ExcelComponent {
      // console.log('Shift Pressed')
     }
   }
+
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selection.current.dataId(),
+      value
+    }))
+  }
+
   onInput(event){
-    this.$emit('table:input', $(event.target))
+    this.updateTextInStore($(event.target).text())
   }
 
 }
