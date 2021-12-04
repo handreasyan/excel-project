@@ -6,6 +6,7 @@ import {TableSelection} from './TableSelection';
 import {$} from '@core/DOM';
 import * as actions from "@/redux/actions";
 import {defaultStyles} from '@/constants';
+import {parse} from "@core/parse";
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -32,15 +33,21 @@ export class Table extends ExcelComponent {
 
     this.selectCell(this.$root.find('[data-id="0:0"]'))
 
-    this.$onSubscribe('formula:input', (text) => {
-      this.updateTextInStore(text)
-      this.selection.current.text(text)
+    this.$onSubscribe('formula:input', (value) => {
+      this.selection.current.attr('data-value', value)
+        .text(parse(value))
+
+      this.updateTextInStore(value)
     })
     this.$onSubscribe('formula:enter', () => {
       this.selection.current.focus()
     })
-    this.$onSubscribe('toolbar:applyStyle', (style) => {
-      this.selection.applyStyle(style)
+    this.$onSubscribe('toolbar:applyStyle', (value) => {
+      this.selection.applyStyle(value)
+      this.$dispatch(actions.applyStyle({
+        value,
+        ids: this.selection.selectedIds
+      }))
     })
 
   }

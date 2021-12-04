@@ -31,4 +31,7 @@ export class TableSelection {
     })
   }
 
+  get selectedIds() {
+    return this.group.map($el => $el.dataId())
+  }
 }

@@ -27,7 +27,6 @@ export class Toolbar extends ExcelStateComponent {
     return this.template
   }
 
-  // next lesson _ 06_19
 
   storeChanged(changes) {
     this.setState(changes.currentStyles)
