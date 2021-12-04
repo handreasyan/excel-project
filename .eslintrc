@@ -19,6 +19,7 @@
     "comma-spacing": "off",
     "no-multiple-empty-lines": "off",
     "quotes": "off",
+    "no-case-declarations": "off",
     "spaced-comment": "off",
     "keyword-spacing": "off",
     "no-unused-vars": "off",
