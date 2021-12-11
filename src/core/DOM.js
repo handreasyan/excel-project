@@ -39,6 +39,7 @@ class DOM {
     this.$el.appendChild(node)
     return this
   }
+
   get data() {
     return this.$el.dataset
   }
